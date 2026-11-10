@@ -1,0 +1,2 @@
+# Paste your Anthropic API key on the line below (replace this whole line's text, keep no spaces).
+# Get one at https://console.anthropic.com  -> API keys. Leave empty for offline mode.

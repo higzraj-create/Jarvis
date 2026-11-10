@@ -1,0 +1,11 @@
+Get ONE file (JARVIS_Setup.exe) to send to your friend - no Python needed on your PC
+=====================================================================================
+Option A (easiest, free, on any computer):
+ 1. Make a free GitHub account, create a NEW PRIVATE repository.
+ 2. Upload this whole folder (including the hidden .github folder) to it.
+ 3. Open the repo > Actions tab > "Build JARVIS installer" > Run workflow.
+ 4. After ~15 min open the finished run and download "JARVIS_Setup" (a zip containing JARVIS_Setup.exe).
+ 5. Send JARVIS_Setup.exe to your friend. Double-click = installs with icon + desktop shortcut.
+ (Delete api_key.txt's contents before uploading if it holds your real key; friend adds their own.)
+
+Option B (on a Windows PC): double-click BUILD_INSTALLER.bat -> installer\JARVIS_Setup.exe
