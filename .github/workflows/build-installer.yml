@@ -1,0 +1,38 @@
+name: Build JARVIS installer
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-voice.txt pyinstaller
+      - name: Build app
+        run: >
+          python -m PyInstaller --noconfirm --clean --windowed --name JARVIS --icon jarvis.ico --paths .
+          --collect-all PySide6.QtMultimedia --collect-all imageio_ffmpeg --collect-all faster_whisper
+          --collect-all ctranslate2 --collect-all edge_tts --collect-all sounddevice --collect-all pyttsx3
+          --hidden-import robotface --hidden-import mutagen --exclude-module tkinter jarvis_music.py
+      - name: Copy data files
+        shell: cmd
+        run: |
+          copy /y pronunciations.json dist\JARVIS\
+          copy /y api_key.txt dist\JARVIS\
+          copy /y jarvis.ico dist\JARVIS\
+      - name: Build installer
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue)) { choco install innosetup -y --no-progress }
+          $iscc = (Get-Command iscc -ErrorAction SilentlyContinue).Source
+          if (-not $iscc) { $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          & $iscc jarvis_installer.iss
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JARVIS_Setup
+          path: installer/JARVIS_Setup.exe
